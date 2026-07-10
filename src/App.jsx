@@ -1,18 +1,26 @@
 import { useState } from "react";
 import axios from "axios";
 
+
 function App() {
+
+  const [currentPage, setCurrentPage] = useState("upload");
 
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+
   const [logs, setLogs] = useState([]);
   const [alerts, setAlerts] = useState([]);
+
+  const [searchIP, setSearchIP] = useState("");
+  const [searched, setSearched] = useState(false);
+
   const [dashboard, setDashboard] = useState({
-  total_logs: 0,
-  failed_logins: 0,
-  successful_logins: 0,
-  total_alerts: 0,
-});
+    total_logs: 0,
+    failed_logins: 0,
+    successful_logins: 0,
+    total_alerts: 0,
+  });
 
   const handleUpload = async () => {
 
@@ -22,7 +30,6 @@ function App() {
     }
 
     const formData = new FormData();
-
     formData.append("file", file);
 
     try {
@@ -34,8 +41,10 @@ function App() {
 
       setMessage(response.data.message);
       setLogs(response.data.logs);
-      setAlerts(response.data.alerts);
+      setAlerts(response.data.all_alerts || response.data.alerts);
       setDashboard(response.data.dashboard);
+
+      setCurrentPage("dashboard");
 
     } catch (error) {
 
@@ -54,118 +63,262 @@ function App() {
   color: "white",
   textAlign: "center",
 };
+const tableHeader = {
+  border: "1px solid #ddd",
+  padding: "10px",
+};
 
-  return (
+const tableCell = {
+  border: "1px solid #ddd",
+  padding: "10px",
+  textAlign: "center",
+};
+const filteredAlerts = alerts.filter((alert) =>
+  alert.ip.toLowerCase().includes(searchIP.toLowerCase())
+);
+const getSeverityStyle = (severity) => {
+  switch (severity) {
+    case "High":
+      return {
+        backgroundColor: "#dc2626",
+        color: "white",
+      };
+
+    case "Medium":
+      return {
+        backgroundColor: "#f59e0b",
+        color: "white",
+      };
+
+    case "Low":
+      return {
+        backgroundColor: "#22c55e",
+        color: "white",
+      };
+
+    default:
+      return {
+        backgroundColor: "#6b7280",
+        color: "white",
+      };
+  }
+};
+return (
   <div
     style={{
-      width: "500px",
-      margin: "60px auto",
-      textAlign: "center",
+      width: "900px",
+      margin: "40px auto",
+      fontFamily: "Arial",
     }}
   >
-    <h1>🛡️ SentinelX</h1>
 
-    <h2>Upload Security Log</h2>
+    {/* ================= UPLOAD PAGE ================= */}
 
-    <input
-      type="file"
-      onChange={(e) => setFile(e.target.files[0])}
-    />
+    {currentPage === "upload" && (
+      <div style={{ textAlign: "center" }}>
 
-    <br /><br />
+        <h1>🛡️ SentinelX</h1>
 
-    <button onClick={handleUpload}>
-      Upload
-    </button>
+        <h2>SOC Log Analyzer</h2>
 
-    <h3>{message}</h3>
+        <br />
+
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+
+        <br /><br />
+
+        <button
+          onClick={handleUpload}
+          style={{
+            padding: "12px 25px",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          Upload & Analyze
+        </button>
+
+        <h3>{message}</h3>
+
+      </div>
+    )}
+
+    {/* ================= DASHBOARD ================= */}
+
+    {currentPage === "dashboard" && (
+      <>
+
+        <h1 style={{ textAlign: "center" }}>
+          📊 Dashboard
+        </h1>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2,1fr)",
+            gap: "20px",
+            marginTop: "30px",
+          }}
+        >
+
+          <div style={cardStyle}>
+            <h3>📄 Total Logs</h3>
+            <h1>{dashboard.total_logs}</h1>
+          </div>
+
+          <div style={cardStyle}>
+            <h3>🚨 Total Alerts</h3>
+            <h1>{dashboard.total_alerts}</h1>
+          </div>
+
+          <div style={cardStyle}>
+            <h3>❌ Failed Logins</h3>
+            <h1>{dashboard.failed_logins}</h1>
+          </div>
+
+          <div style={cardStyle}>
+            <h3>✅ Successful Logins</h3>
+            <h1>{dashboard.successful_logins}</h1>
+          </div>
+
+        </div>
+
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "40px",
+          }}
+        >
+
+          <button
+            onClick={() => setCurrentPage("investigation")}
+            style={{
+              padding: "12px 30px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            🔍 Investigate
+          </button>
+
+        </div>
+
+      </>
+    )}
+
+    {/* ================= INVESTIGATION PAGE ================= */}
+
+   {currentPage === "investigation" && (
+  <>
+
+    <h1 style={{ textAlign: "center" }}>
+      🔍 Investigation
+    </h1>
+
     <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "20px",
-    marginTop: "30px",
-    marginBottom: "30px",
-  }}
->
-  <div style={cardStyle}>
-    <h3>📄 Total Logs</h3>
-    <h1>{dashboard.total_logs}</h1>
-  </div>
+      style={{
+        marginTop: "30px",
+        marginBottom: "20px",
+      }}
+    >
 
-  <div style={cardStyle}>
-    <h3>🚨 Total Alerts</h3>
-    <h1>{dashboard.total_alerts}</h1>
-  </div>
+      <input
+        type="text"
+        placeholder="Search IP Address..."
+        value={searchIP}
+        onChange={(e) => {
+          setSearchIP(e.target.value);
+          setSearched(false);
+        }}
+        style={{
+          width: "100%",
+          padding: "12px",
+          borderRadius: "8px",
+          border: "1px solid gray",
+          fontSize: "16px",
+        }}
+      />
 
-  <div style={cardStyle}>
-    <h3>❌ Failed Logins</h3>
-    <h1>{dashboard.failed_logins}</h1>
-  </div>
+      <br />
+      <br />
 
-  <div style={cardStyle}>
-    <h3>✅ Successful Logins</h3>
-    <h1>{dashboard.successful_logins}</h1>
-  </div>
-</div>
+      <button
+        onClick={() => setSearched(true)}
+        style={{
+          padding: "10px 25px",
+          cursor: "pointer",
+        }}
+      >
+        🔍 Search
+      </button>
 
-    {/* Parsed Logs */}
-    {logs.length > 0 && (
-      <div style={{ marginTop: "30px", textAlign: "left" }}>
-        <h2>Parsed Logs</h2>
+    </div>
 
-        {logs.map((log, index) => (
-          <div
-            key={index}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              marginBottom: "10px",
-              borderRadius: "5px"
-            }}
-          >
-            <p><strong>Time:</strong> {log.timestamp}</p>
-            <p><strong>Status:</strong> {log.status}</p>
-            <p><strong>User:</strong> {log.user}</p>
-            <p><strong>IP:</strong> {log.ip}</p>
-          </div>
-        ))}
-      </div>
+  </>
+)}
+{searched && (
+  <>
+    <h2 style={{ marginTop: "30px" }}>
+      🚨 Recent Security Alerts
+    </h2>
+
+    {filteredAlerts.length === 0 ? (
+      <p>No security alerts detected.</p>
+    ) : (
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          marginTop: "20px",
+        }}
+      >
+        <thead>
+          <tr style={{ backgroundColor: "#1e293b", color: "white" }}>
+            <th style={tableHeader}>Alert</th>
+            <th style={tableHeader}>Severity</th>
+            <th style={tableHeader}>Source IP</th>
+            <th style={tableHeader}>Failed Attempts</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {filteredAlerts.map((alert, index) => (
+            <tr key={index}>
+              <td style={tableCell}>{alert.alert}</td>
+
+              <td style={tableCell}>
+                <span
+                  style={{
+                    ...getSeverityStyle(alert.severity),
+                    padding: "6px 12px",
+                    borderRadius: "20px",
+                    fontWeight: "bold",
+                    display: "inline-block",
+                  }}
+                >
+                  {alert.severity}
+                </span>
+              </td>
+
+              <td style={tableCell}>{alert.ip}</td>
+
+              <td style={tableCell}>
+                {alert.failed_attempts}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     )}
-
-    {/* ADD THE ALERTS SECTION HERE 👇 */}
-    {alerts.length > 0 && (
-      <div style={{ marginTop: "30px" }}>
-        <h2>🚨 Security Alerts</h2>
-
-        {alerts.map((alert, index) => (
-          <div
-            key={index}
-            style={{
-              border: "2px solid red",
-              borderRadius: "8px",
-              padding: "15px",
-              marginBottom: "15px",
-              backgroundColor: "#2b1a1a"
-            }}
-          >
-            <h3>{alert.alert}</h3>
-
-            <p><strong>Severity:</strong> {alert.severity}</p>
-
-            <p><strong>Source IP:</strong> {alert.ip}</p>
-
-            <p><strong>Failed Attempts:</strong> {alert.failed_attempts}</p>
-
-            <p><strong>Recommendation:</strong> {alert.recommendation}</p>
-          </div>
-        ))}
-      </div>
-    )}
+  </>
+)}
 
   </div>
 );
 
 }
-
 export default App;
+  
