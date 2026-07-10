@@ -7,6 +7,12 @@ function App() {
   const [message, setMessage] = useState("");
   const [logs, setLogs] = useState([]);
   const [alerts, setAlerts] = useState([]);
+  const [dashboard, setDashboard] = useState({
+  total_logs: 0,
+  failed_logins: 0,
+  successful_logins: 0,
+  total_alerts: 0,
+});
 
   const handleUpload = async () => {
 
@@ -29,6 +35,7 @@ function App() {
       setMessage(response.data.message);
       setLogs(response.data.logs);
       setAlerts(response.data.alerts);
+      setDashboard(response.data.dashboard);
 
     } catch (error) {
 
@@ -39,6 +46,14 @@ function App() {
     }
 
   };
+  const cardStyle = {
+  border: "1px solid #444",
+  borderRadius: "10px",
+  padding: "20px",
+  backgroundColor: "#1e293b",
+  color: "white",
+  textAlign: "center",
+};
 
   return (
   <div
@@ -64,6 +79,35 @@ function App() {
     </button>
 
     <h3>{message}</h3>
+    <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "20px",
+    marginTop: "30px",
+    marginBottom: "30px",
+  }}
+>
+  <div style={cardStyle}>
+    <h3>📄 Total Logs</h3>
+    <h1>{dashboard.total_logs}</h1>
+  </div>
+
+  <div style={cardStyle}>
+    <h3>🚨 Total Alerts</h3>
+    <h1>{dashboard.total_alerts}</h1>
+  </div>
+
+  <div style={cardStyle}>
+    <h3>❌ Failed Logins</h3>
+    <h1>{dashboard.failed_logins}</h1>
+  </div>
+
+  <div style={cardStyle}>
+    <h3>✅ Successful Logins</h3>
+    <h1>{dashboard.successful_logins}</h1>
+  </div>
+</div>
 
     {/* Parsed Logs */}
     {logs.length > 0 && (
