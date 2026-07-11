@@ -76,6 +76,9 @@ const tableCell = {
 const filteredAlerts = alerts.filter((alert) =>
   alert.ip.toLowerCase().includes(searchIP.toLowerCase())
 );
+const filteredLogs = logs.filter((log) =>
+  log.ip.toLowerCase().includes(searchIP.toLowerCase())
+);
 const getSeverityStyle = (severity) => {
   switch (severity) {
     case "High":
@@ -312,11 +315,48 @@ return (
           ))}
         </tbody>
       </table>
+      
     )}
   </>
 )}
 
+
+{searched && (
+  <>
+    <hr style={{ margin: "40px 0" }} />
+
+    <h2>📄 Investigation Logs</h2>
+
+    {filteredLogs.length === 0 ? (
+      <p>No logs found for this IP.</p>
+    ) : (
+      <>
+        <div style={{ marginTop: "20px" }}>
+  {filteredLogs.map((log, index) => (
+    <div
+      key={index}
+      style={{
+        border: "1px solid #555",
+        borderRadius: "8px",
+        padding: "15px",
+        marginBottom: "15px",
+        backgroundColor: "#1f2937",
+        textAlign: "left",
+      }}
+    >
+      <p><strong>🕒 Time:</strong> {log.timestamp}</p>
+      <p><strong>📌 Status:</strong> {log.status}</p>
+      <p><strong>👤 User:</strong> {log.user}</p>
+      <p><strong>🌐 IP:</strong> {log.ip}</p>
+    </div>
+  ))}
+</div>
+      </>
+    )}
+  </>
+)}
   </div>
+  
 );
 
 }
