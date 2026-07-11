@@ -217,16 +217,27 @@ return (
    {currentPage === "investigation" && (
   <>
 
+    <button
+      onClick={() => {
+        setCurrentPage("dashboard");
+        setSearched(false);
+        setSearchIP("");
+      }}
+      style={{
+        padding: "10px 20px",
+        marginBottom: "20px",
+        cursor: "pointer",
+        borderRadius: "8px",
+      }}
+    >
+      ← Back to Dashboard
+    </button>
+
     <h1 style={{ textAlign: "center" }}>
       🔍 Investigation
     </h1>
 
-    <div
-      style={{
-        marginTop: "30px",
-        marginBottom: "20px",
-      }}
-    >
+    <div style={{ marginTop: "30px", marginBottom: "20px" }}>
 
       <input
         type="text"
@@ -249,7 +260,14 @@ return (
       <br />
 
       <button
-        onClick={() => setSearched(true)}
+        onClick={() => {
+  if (searchIP.trim() === "") {
+    alert("Please enter an IP address first.");
+    return;
+  }
+
+  setSearched(true);
+}}
         style={{
           padding: "10px 25px",
           cursor: "pointer",
@@ -321,6 +339,7 @@ return (
 )}
 
 
+
 {searched && (
   <>
     <hr style={{ margin: "40px 0" }} />
@@ -354,6 +373,7 @@ return (
       </>
     )}
     <hr style={{ margin: "40px 0" }} />
+    
 
 <h2>🛡 Recommended Actions</h2>
 
