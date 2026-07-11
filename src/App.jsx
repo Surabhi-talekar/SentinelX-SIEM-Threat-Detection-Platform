@@ -353,12 +353,33 @@ return (
 </div>
       </>
     )}
+    <hr style={{ margin: "40px 0" }} />
+
+<h2>🛡 Recommended Actions</h2>
+
+<div
+  style={{
+    backgroundColor: "#1f2937",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "left",
+    border: "1px solid #374151",
+  }}
+>
+  <p>🚫 Block the source IP address.</p>
+  <p>🔒 Reset the affected user's password.</p>
+  <p>📋 Review authentication logs.</p>
+  <p>📧 Notify the Security Team.</p>
+</div>
   </>
 )}
   </div>
   
+  
 );
 
+
 }
+
 export default App;
   
