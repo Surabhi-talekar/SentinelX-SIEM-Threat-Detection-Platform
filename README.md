@@ -1,16 +1,101 @@
-# React + Vite
+# 🛡️ SentinelX - SIEM Threat Detection Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A web-based Security Information and Event Management (SIEM) platform that analyzes SSH authentication logs, detects suspicious activities, investigates IP addresses, and generates professional investigation reports.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 📂 Upload SSH log files (.log, .txt)
+- 📊 Interactive Security Dashboard
+- 🚨 Brute Force Attack Detection
+- 🔐 Successful Login After Multiple Failures Detection
+- 🔍 IP-based Investigation
+- 🌍 IP Geolocation (Public IPs)
+- 📄 Investigation Timeline
+- 🛡 Recommended Security Actions
+- 📑 Export Investigation Report (PDF)
+- 📈 Dashboard Statistics
+- 🎨 Modern Responsive UI
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Frontend
+- React.js
+- Axios
+- jsPDF
 
-## Expanding the Oxlint configuration
+Backend
+- Python
+- Flask
+- Flask-CORS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Libraries
+- ip-api (Geolocation API)
+- Regular Expressions (Log Parsing)
+
+## 📂 Project Structure
+
+SentinelX/
+├── backend/
+│   ├── app.py
+│   ├── parser.py
+│   ├── detector.py
+│   └── uploads/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+
+## ⚙️ How It Works
+
+1. Upload SSH authentication logs.
+2. Parse log entries.
+3. Detect suspicious login activities.
+4. Generate security alerts.
+5. Investigate IP addresses.
+6. Display geolocation information.
+7. Recommend mitigation steps.
+8. Export a PDF investigation report.
+
+## 🚀 Getting Started
+
+### Backend
+
+cd backend
+pip install -r requirements.txt
+python app.py
+
+### Frontend
+
+cd frontend
+npm install
+npm run dev
+
+## 📸 Screenshots
+
+
+
+- Upload Page![alt text](<SentinelX Dashboard.png>)
+- Dashboard![alt text](dashboard.png)
+- Investigation Page![alt text](<Investigation page1.png>) ![alt text](<page 2.png>)
+- PDF Report![alt text](SentinelXpdfreport.png)
+
+## 🎯 Future Enhancements
+
+- Threat Intelligence Integration
+- Interactive Charts
+- Real-time Log Monitoring
+- User Authentication
+- Email Alert Notifications
+
+## 👩‍💻 Author
+
+Surabhi Talekar
+
+BE Information Technology
+
+Cybersecurity Enthusiast
+
+## 📄 License
+
+This project is developed for educational and portfolio purposes.
