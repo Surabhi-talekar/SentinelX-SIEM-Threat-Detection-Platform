@@ -78,8 +78,8 @@ npm run dev
 - Upload Page![alt text](<SentinelX Dashboard.png>)
 - Dashboard![alt text](dashboard.png)
 - Investigation Page![alt text](<Investigation page1.png>) ![alt text](<page 2.png>)
-- PDF Report![alt text](SentinelXpdfreport.png)
-
+- PDF Report! 
+![alt text](image.png)
 ## 🎯 Future Enhancements
 
 - Threat Intelligence Integration
